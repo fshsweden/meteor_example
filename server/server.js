@@ -16,22 +16,31 @@ Meteor.methods({
 	},
 
 	"createNewCustomer" : function(options) {
-
-/*
-var ret = {};
-options.replace(/(\b[^:]+):'([^']+)'/g, function ($0, param, value) {
-    ret[param] = value;
-});
-*/
+		var ret = JSON.parse(options);
 		console.log(typeof ret);
-//		console.log(ret);
+		Customers.insert(ret);
+	},
 
-		var propValue;
-		for(var propName in options) {
-    		propValue = options[propName]
-		    console.log("propName:"+propName + " propValue:" + propValue);
+	"updateCustomer" : function(options) {
+		var ret = JSON.parse(options);
+		console.log(typeof ret);
+
+		for (x in ret) {
+			console.log("1) field " + x + " has value " + ret[x]);
 		}
+		var id = ret['id'];
+		delete ret['id'];
 
-//		Customers.insert(ret);
+		for (x in ret) {
+			console.log("2) field " + x + " has value " + ret[x]);
+		}
+		Customers.update({"_id" : id},ret,function(error, count) {
+			if (error)
+				console.log("Error updating!");
+			else
+				console.log(count + " docs updated");
+
+		});
 	}
+
 });
